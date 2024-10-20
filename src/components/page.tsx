@@ -8,12 +8,9 @@ import { ConnectionProvider, WalletProvider, useConnection, useWallet } from '@s
 import { WalletModalProvider, WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui'
 import { clusterApiUrl, Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
-import { Roboto_Mono } from 'next/font/google'
 
 // Make sure to import the required CSS for the wallet adapter
 import '@solana/wallet-adapter-react-ui/styles.css'
-
-const robotoMono = Roboto_Mono({ subsets: ['latin'] })
 
 function WalletCard() {
   const { connection } = useConnection();
@@ -69,24 +66,29 @@ function WalletCard() {
   }, [connected, publicKey, connection]);
 
   return (
-    <Card className={`w-full max-w-md mx-auto mt-8 bg-white/10 text-white ${robotoMono.className}`}>
+    <Card className="w-full max-w-md mx-auto mt-8 bg-white/10 text-white">
       <CardHeader>
-        <CardTitle className="text-center text-xl">Wallet Status</CardTitle>
+        <CardTitle className="text-center">Wallet Status</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          <p className="text-sm text-center font-medium">
-            Status: <span className="font-bold">{connected ? 'Connected' : 'Disconnected'}</span>
+          <p className="text-sm font-medium">
+            Status: {connected ? 'Connected' : 'Disconnected'}
           </p>
           {connected && publicKey && (
             <>
-              <p className="text-sm text-center font-medium">
-                Address: <span className="font-bold">{publicKey.toString().slice(0, 4)}...{publicKey.toString().slice(-4)}</span>
+              <p className="text-sm font-medium">
+                Address: {publicKey.toString().slice(0, 4)}...{publicKey.toString().slice(-4)}
               </p>
-              <p className="text-sm text-center font-medium">
-                SOL Balance: <span className="font-bold">{balances.SOL !== null ? balances.SOL.toFixed(4) : 'Loading...'}</span>
+              <p className="text-sm font-medium">
+                SOL Balance: {balances.SOL !== null ? balances.SOL.toFixed(4) : 'Loading...'}
               </p>
-             
+              <p className="text-sm font-medium">
+                USDC Balance: {balances.USDC !== null ? balances.USDC.toFixed(2) : 'Loading...'}
+              </p>
+              <p className="text-sm font-medium">
+                USDT Balance: {balances.USDT !== null ? balances.USDT.toFixed(2) : 'Loading...'}
+              </p>
             </>
           )}
         </div>
@@ -96,9 +98,6 @@ function WalletCard() {
 }
 
 function MainContent() {
-  const { connection } = useConnection();
-  const { publicKey } = useWallet();
-
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-blue-900/20 pointer-events-none" aria-hidden="true" />
@@ -122,17 +121,13 @@ function MainContent() {
           </svg>
           <span className="ml-2 text-2xl font-bold">SUMO</span>
         </Link>
-        <nav className="ml-auto my-3 py-5 flex gap-4 sm:gap-6">
-        <Link href="/#" target="_blank" rel="noopener noreferrer">
-            <Button className="bg-white text-black font-semibold hover:bg-gray-200">
-            Sign in
-            </Button>
-          </Link>
-          <Link href="/#" target="_blank" rel="noopener noreferrer">
-            <Button className="bg-white  text-black font-semibold hover:bg-gray-200">
-            Log in
-            </Button>
-          </Link>
+        <nav className="ml-auto flex gap-4 sm:gap-6">
+          <Button className="bg-white text-black hover:bg-gray-200 font-semibold">
+            Sign In
+          </Button>
+          <Button className="bg-white text-black hover:bg-gray-200 font-semibold">
+            Login
+          </Button>
           <WalletMultiButton className="!bg-white !text-black hover:!bg-gray-200 !font-semibold" />
           <WalletDisconnectButton className="!bg-white !text-black hover:!bg-gray-200 !font-semibold" />
         </nav>
@@ -140,19 +135,17 @@ function MainContent() {
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center">
         <div className="container px-4 md:px-6 text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-           On SUMO Sum it
+            Sum it
           </h1>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter text-gray-400 mb-4">
-          On SUMO Bit it
+           Bit it
           </h2>
           <p className="max-w-[600px] mx-auto text-gray-400 md:text-xl mb-8">
-          ON SUMO Win it
+           Win it
           </p>
-          <Link href="https://mishal-turkane.hashnode.dev/solana-sumo" target="_blank" rel="noopener noreferrer">
-            <Button className="bg-white text-black font-semibold hover:bg-gray-200">
-           Sumo docs
-            </Button>
-          </Link>
+          <Button className="bg-white text-black font-semibold hover:bg-gray-200">
+            Winning Amount Pool
+          </Button>
         </div>
         <WalletCard />
       </main>
@@ -173,7 +166,7 @@ function MainContent() {
   )
 }
 
-export default function Page() {
+export function PageComponent() {
   return (
     <ConnectionProvider endpoint={"https://solana-devnet.g.alchemy.com/v2/A4n7tJP75oDaD4emFu7wcMBo6bEelthD"}>
       <WalletProvider wallets={[]} autoConnect>
